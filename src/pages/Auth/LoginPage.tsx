@@ -13,7 +13,7 @@
 
 //   const handleVNGLogin = async () => {
 //     try {
-//       const response = await fetch('https://acct-mcr.zalopay.vn/api/login', {
+//       const response = await fetch('http://localhost:3014/login', {
 //         method: 'GET',
 //       });
 
@@ -87,61 +87,26 @@
 
 // export default LoginPage;
 
+import React from 'react';
 
-import React, { useState } from 'react';
-
-interface LoginResponse {
-  access_token: string;
-  token_type: string;
-}
-
-const Login: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Hàm gọi API khi người dùng click vào nút "Continue with VNG Office 365"
-  const handleLogin = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('https://acct-mcr.zalopay.vn/api/login', {
-        method: 'GET',
-        credentials: 'include', // Include cookies for session if needed
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed, please try again.');
-      }
-
-      const data: LoginResponse = await response.json();
-
-      // Lưu token vào localStorage hoặc sessionStorage nếu cần
-      localStorage.setItem('access_token', data.access_token);
-
-      // Chuyển hướng người dùng sau khi login thành công (thay FE_URL bằng URL frontend của bạn)
-      window.location.href = `https://acct-mcr.zalopay.vn/api/oidc?id=${data.access_token}`;
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const LoginPage: React.FC = () => {
   return (
-    <div className="login-container">
-      <h2>Login to VNG Office 365</h2>
-      <button 
-        onClick={handleLogin} 
-        disabled={loading} 
-        className="login-button"
-      >
-        {loading ? 'Logging in...' : 'Continue with VNG Office 365'}
-      </button>
-
-      {error && <p className="error-message">{error}</p>}
+    <div className="container d-flex align-items-center justify-content-center min-vh-100">
+      <div className="card" style={{ width: '25rem' }}>
+        <div className="card-body">
+          <h5 className="card-title text-center">Login</h5>
+          <div className="text-center mt-3">
+            <a 
+              href="http://localhost:3014/login" // Direct link to the login page
+              className="btn btn-primary w-100"
+            >
+              Continue with VNG Office 365
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;
