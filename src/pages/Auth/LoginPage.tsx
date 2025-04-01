@@ -97,7 +97,7 @@ const LoginPage: React.FC = () => {
           <h5 className="card-title text-center">Login</h5>
           <div className="text-center mt-3">
             <a 
-              href="http://acct-mcr.zalopay.vn/api/login" // Direct link to the login page
+              href="https://zdsdev.zalopay.vn/be/login" // Direct link to the login page
               className="btn btn-primary w-100"
             >
               Continue with VNG Office 365
