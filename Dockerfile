@@ -1,6 +1,7 @@
 # Use an official Node.js image as the base image
 FROM node:23-alpine as build
 
+# Set up proxy if needed
 ENV http_proxy="http://10.40.81.2:8088"
 ENV https_proxy="http://10.40.81.2:8088"
 
@@ -19,16 +20,19 @@ COPY . .
 # Build the React app
 RUN npm run build
 
-# Use a lightweight Nginx image for serving the built application
-FROM nginx:1.21-alpine
+# Use a minimal Node.js image to serve the app
+FROM node:23-alpine
 
-# Copy the built React app to Nginx's web root
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Install `serve`
+RUN npm install -g serve
+
+# Copy built React app
+COPY --from=build /app/build .
 
 # Expose the port
-EXPOSE 80
+EXPOSE 3000
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the app
+CMD ["serve", "-s", ".", "-l", "3000"]
